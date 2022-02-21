@@ -4,27 +4,33 @@ const port = process.env.PORT || 5000;
 const cors = require('cors');
 const path = require('path');
 app.use(cors());
-
+const { Server } = require("socket.io")
 const http = require('http');
+const server = http.createServer(app);
 let users = [];
+const io = new Server(server);
 
 app.use(express.static('public'));
 
-app.get('/api/helloWorld', (req, res) => {
-    console.log(`Searching for a gif with the term: ${req.query.term}`);
+app.get('/api/start', (req, res) => {
+    io.emit("start", {secondsToStart: 5})
     res.send({
         success: true,
-        data: []
+        users: users
     });
 });
-const server = http.createServer(app);
-const { Server } = require("socket.io")
+app.get('/api/reset', (req, res) => {
+    users = [];
+    io.emit('reset', {});
+    res.send({
+        success: true,
+        users: users
+    });
+});
 
-const io = new Server({
-  cors: {
-    origin: `http://localhost:${port}`
-  }
-})
+
+
+
 io.on('connection', (socket) => {
     console.log('user connected');
     
@@ -35,14 +41,15 @@ io.on('connection', (socket) => {
     socket.on('login', (data) => {
         console.log(`login ${data.name}`)
         users= [...users, data];
-        io.emit('user-added', users);    
+        io.emit('user-change', users);    
     });
 });
 
-io.listen(5001);
+
 app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
  });
-app.listen(port, () => {
-   console.log(`Server port ${port}`);
+
+server.listen((port), () => {
+    console.log('Started');
 });
