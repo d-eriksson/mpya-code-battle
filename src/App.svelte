@@ -1,10 +1,38 @@
 <script>
-	export let name;
+	import io from "socket.io-client";
+	let name = "";
+	let loggedIn = false;
+	const socket = io("http://localhost:5001")
+	socket.on('start', (data) => {
+		console.log(data);
+		name="start";
+	})
+	let users = [];
+	socket.on('user-added', (data) => {
+		console.log(data);
+		users = data;
+	})
+	function submit(){
+		loggedIn = true;
+		socket.emit('login', {name});
+	}	
+	
+
 </script>
 
 <main>
-	<h1>Hello {name}!</h1>
-	<p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
+	{#if loggedIn}
+	<ul>
+		{#each users as user}
+			<li>{user.name}</li>
+		{/each}
+	</ul>
+	{:else}
+		<input bind:value={name}>
+		<button on:click={submit} disabled={name.length <= 0}>Get Started</button>
+	{/if}
+	
+	
 </main>
 
 <style>
@@ -13,13 +41,6 @@
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
 	}
 
 	@media (min-width: 640px) {

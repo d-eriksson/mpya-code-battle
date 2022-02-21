@@ -22,9 +22,11 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.3",
-    "sirv-cli": "^2.0.0"
+    "sirv-cli": "^2.0.0",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1"
   },
-  "engine":{
+  "engine": {
     "node": "14.x"
   }
 }
