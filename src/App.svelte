@@ -1,43 +1,98 @@
 <script>
 	import io from "socket.io-client";
-	import { fade, blur, scale, slide, fly } from 'svelte/transition';
+	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
+	import Api from './service/api';
 	let name = "";
 	let loggedIn = false;
 	let started = false;
+	let loginError = null;
+	let isAdmin = false;
 	let timeToStart;
+	let gameNumber = null;
+	let users = [];
+	let showWinners = false;
+	let winners = [];
 	const socket = io();
 	socket.on('start', (data) => {
-		console.log(data);
 		started = true;
 		timeToStart = tweened(data.secondsToStart);
-		startCounter();
+		startCounter(`https://cssbattle.dev/play/${data.gameId}`);
 		
 	})
-	let users = [];
 	socket.on('user-change', (data) => {
+		if(socket.id == data.socketId){
+			loggedIn = true;
+		}
+		console.log(data)
+		users = data.userData;
+	})
+	socket.on('admin-users', (data) => {
+		loggedIn = true;
+		isAdmin = true;
 		users = data;
 	})
+	socket.on('username-error', (message) => {
+		loginError = message;
+	})
 	socket.on('reset', (data) => {
-		loggedIn = false;
+		if(!isAdmin){
+			loggedIn = false;
+		}
 		started = false;
 		name = "";
 	})
+	socket.on('display-winners', (data)=>{
+		console.log(data);
+		winners = data;
+		showWinners = true;
+	})
 	function submit(){
-		loggedIn = true;
-		socket.emit('login', {name});
+		loginError = null;
+		socket.emit('login', {name, socketId: socket.id});
 	}
-	function startCounter(){
+	function startCounter(url){
 		var id = setInterval(() => {
 			if ($timeToStart > 0) {
 				$timeToStart--;
 			}
 			else{
 				clearInterval(id);
+				if(!isAdmin){
+					window.location.href = url;
+				}
+				
 
 			}
 		}, 1000);
+	}
+	function adminStartGame(){
+		if(gameNumber){
+			Api.get(`/start?gameId=${gameNumber}`)
+				.then(function (response) {
+					// handle success
+					console.log(response);
+				})
+				.catch(function (error) {
+					// handle error
+					console.log(error);
+				})
+		}
+		
+	}
+	function adminAddPoints(user){
+		console.log(user)
+		Api.post('/results',{
+			name: user.name,
+			points: user.pointsToAdd
+		})
+	}
+	function adminReset(){
+		Api.get('/reset')
+	}
+	function adminDisplayWinners(){
+		Api.get('/displayWinners')
 	}
 	$: seconds = Math.floor($timeToStart)
 	
@@ -45,15 +100,15 @@
 </script>
 
 <main>
+	<img src="images/mpya-css-battle-logo.png"/>
 	<div class="middle">
-		{#if loggedIn}
-			<div class="users"> 
-				{#each users as user}
-					<div class="user">{user.name}</div>
-				{/each}
-			</div>
-		{:else if started}
-			
+		{#if showWinners}
+			<h2>Winners</h2>
+			{#each winners as winner}
+				<h3>{winner.name} - {winner.totalScore} points</h3>
+			{/each}
+
+		{:else if started && !isAdmin}	
 				{#key seconds}
 					<h1 
 						in:fly="{{delay: 0, duration: 300, x: -100, y: 0, opacity: 0, easing: quintOut}}"
@@ -62,12 +117,36 @@
 						{seconds}
 					</h1>
 				{/key}
-			
+		{:else if loggedIn}
+			{#if isAdmin}
+				<input placeholder="ex 99" bind:value={gameNumber} />
+				<button on:click={adminStartGame}>Start game</button>
+				<button on:click={adminReset}>Reset round</button>
+				<button on:click={adminDisplayWinners}>Display winners</button>
+			{/if}
+			<h2>Contestants</h2>
+			<div class="users"> 
+				{#each users as user, index}
+					<div class="user">
+						<h3>{user.name}</h3>
+						{#if user.points > 0}
+							<p>Points: {user.points}</p>
+						{/if}
+						{#if isAdmin}
+							<input placeholder="ex 99" bind:value={users[index].pointsToAdd} type="number" />
+							<button on:click={() => adminAddPoints(user)}>Submit</button>
+						{/if}
+					</div>
+				{/each}
+			</div>	
 		{:else}
 			<label>Username</label>
 			<input 
 				placeholder="Your username"
 				bind:value={name}>
+				{#if loginError}
+					<span>{loginError}</span>
+				{/if}
 			<button on:click={submit} disabled={name.length <= 0}>Get Started</button>
 		{/if}
 	</div>
@@ -80,14 +159,14 @@
 		text-align: center;
 		padding: 1em;
 		margin: 0 auto;
-		background: #E34586;
+		background: white;
 		color: white;
 		min-height: calc(100vh - 2em);
 	}
 	h1{
 		position:absolute;
-		left:0;
-		right:0;
+		left:120px;
+		right:120px;
 	}
 	input{
 		display: block;
@@ -107,6 +186,26 @@
 		top: 50%;
 		left: 50%;
 		transform: translate(-50%,-50%);
+		width: 100%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		background: #E34586;
+		padding: 32px 0;
+		min-height: 140px;
+	}
+	.users{
+		display:flex;
+		width: 100%;
+		justify-content: space-around;
+		margin-top:24px;
+	}
+	h3{
+		margin:0;
+	}
+	p{
+		margin:0;
 	}
 
 	@media (min-width: 640px) {
