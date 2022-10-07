@@ -105,7 +105,7 @@
 		{#if showWinners}
 			<h2>Winners</h2>
 			{#each winners as winner}
-				<h3>{winner.name} - {winner.totalScore} points</h3>
+				<h3>{winner.name} - {winner.totalScore !== null ? `${winner.totalScore} points` : 'No points'}</h3>
 			{/each}
 
 		{:else if started && !isAdmin}	
