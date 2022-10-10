@@ -14,6 +14,8 @@ const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json()
 app.use(express.static('public'));
 
+const ADMIN = 'admin'
+
 app.get('/api/start', (req, res) => {
     io.emit("start", {secondsToStart: 5, gameId: req.query.gameId})
     res.send({
@@ -59,6 +61,12 @@ app.get('/api/displayWinners', (req, res) =>{
         success: true
     });
 })
+app.get('/api/adminRemoveDisplayWinners', (req, res) => {
+    io.emit('display-main-menu')
+    res.send({
+        success: true
+    });
+})
 app.post('/api/results',jsonParser, (req, res) => {
     console.log(req.body)
     const found = results.users.find(element => element.name == req.body.name);
@@ -96,7 +104,7 @@ io.on('connection', (socket) => {
     });
     
     socket.on('login', (data) => {
-        const admin = data.name==="DavidSuperAdmin";
+        const admin = data.name=== ADMIN;
         if(!admin){
             const userInPool = currentUsers.find(user => user.name === data.name);
             if(!userInPool){

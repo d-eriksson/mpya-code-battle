@@ -48,6 +48,11 @@
 		winners = data;
 		showWinners = true;
 	})
+	socket.on('display-main-menu', () => {
+		console.log('Display main menu')
+		if (loggedIn)
+			showWinners = false;
+	})
 	function submit(){
 		loginError = null;
 		socket.emit('login', {name, socketId: socket.id});
@@ -94,6 +99,9 @@
 	function adminDisplayWinners(){
 		Api.get('/displayWinners')
 	}
+	function adminRemoveDisplayWinners(){
+		Api.get('/adminRemoveDisplayWinners')
+	}
 	$: seconds = Math.floor($timeToStart)
 	
 
@@ -104,6 +112,9 @@
 	<div class="middle">
 		{#if showWinners}
 			<h2>Winners</h2>
+			{#if isAdmin}
+				<button on:click={adminRemoveDisplayWinners}>Main menu</button>
+			{/if}
 			{#each winners as winner}
 				<h3>{winner.name} - {winner.totalScore !== null ? `${winner.totalScore} points` : 'No points'}</h3>
 			{/each}
