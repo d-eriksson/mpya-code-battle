@@ -130,7 +130,7 @@
 				{/key}
 		{:else if loggedIn}
 			{#if isAdmin}
-				<input placeholder="ex 99" bind:value={gameNumber} />
+				<input placeholder="CSSBattle ID" bind:value={gameNumber} />
 				<button on:click={adminStartGame}>Start game</button>
 				<button on:click={adminReset}>Reset round</button>
 				<button on:click={adminDisplayWinners}>Display winners</button>
@@ -144,7 +144,7 @@
 							<p>Points: {user.points}</p>
 						{/if}
 						{#if isAdmin}
-							<input placeholder="ex 99" bind:value={users[index].pointsToAdd} type="number" />
+							<input placeholder="Points" bind:value={users[index].pointsToAdd} type="number" />
 							<button on:click={() => adminAddPoints(user)}>Submit</button>
 						{/if}
 					</div>
