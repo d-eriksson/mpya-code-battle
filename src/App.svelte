@@ -104,7 +104,7 @@
 						winners={winners}
 					/>
 				{:else}
-					<h2>Contestants</h2>
+					<h1>Contestants</h1>
 					<div class="userGrid">
 						{#each users as user}
 							<User
@@ -142,11 +142,6 @@
 		background: white;
 		color: white;
 		min-height: calc(100vh - 2em);
-	}
-	h1{
-		position:absolute;
-		left:120px;
-		right:120px;
 	}
 	input{
 		display: block;
