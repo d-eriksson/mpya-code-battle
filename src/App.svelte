@@ -4,13 +4,13 @@
 	import { quintOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
 	import Api from './service/api';
+  import AdminMenu from "./AdminMenu.svelte";
 	let name = "";
 	let loggedIn = false;
 	let started = false;
 	let loginError = null;
 	let isAdmin = false;
 	let timeToStart;
-	let gameNumber = null;
 	let users = [];
 	let showWinners = false;
 	let winners = [];
@@ -72,32 +72,12 @@
 			}
 		}, 1000);
 	}
-	function adminStartGame(){
-		if(gameNumber){
-			Api.get(`/start?gameId=${gameNumber}`)
-				.then(function (response) {
-					// handle success
-					console.log(response);
-				})
-				.catch(function (error) {
-					// handle error
-					console.log(error);
-				})
-		}
-		
-	}
 	function adminAddPoints(user){
 		console.log(user)
 		Api.post('/results',{
 			name: user.name,
 			points: user.pointsToAdd
 		})
-	}
-	function adminReset(){
-		Api.get('/reset')
-	}
-	function adminDisplayWinners(){
-		Api.get('/displayWinners')
 	}
 	function adminRemoveDisplayWinners(){
 		Api.get('/adminRemoveDisplayWinners')
@@ -130,10 +110,7 @@
 				{/key}
 		{:else if loggedIn}
 			{#if isAdmin}
-				<input placeholder="CSSBattle ID" bind:value={gameNumber} />
-				<button on:click={adminStartGame}>Start game</button>
-				<button on:click={adminReset}>Reset round</button>
-				<button on:click={adminDisplayWinners}>Display winners</button>
+			 <AdminMenu />
 			{/if}
 			<h2>Contestants</h2>
 			<div class="users"> 
@@ -181,12 +158,6 @@
 	}
 	input{
 		display: block;
-	}
-	button{
-		background: #00b2aa;
-		color: white;
-		border:none;
-		border-radius: 0;
 	}
 	label{
 		text-align: left;

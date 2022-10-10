@@ -44,13 +44,15 @@ input:disabled {
 }
 
 button {
-	color: #333;
-	background-color: #f4f4f4;
+	background: #00b2aa;
+	color: white;
+	border:none;
+	border-radius: 0;
 	outline: none;
 }
 
 button:disabled {
-	color: #999;
+	opacity: 0.75;
 }
 
 button:not(:disabled):active {
