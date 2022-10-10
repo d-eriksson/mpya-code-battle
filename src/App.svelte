@@ -3,8 +3,9 @@
 	import { fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import { tweened } from 'svelte/motion';
-	import Api from './service/api';
-  import AdminMenu from "./AdminMenu.svelte";
+  import Menu from "./Menu.svelte";
+  import User from "./User.svelte";
+	import WinnerTable from "./WinnerTable.svelte"
 	let name = "";
 	let loggedIn = false;
 	let started = false;
@@ -72,62 +73,52 @@
 			}
 		}, 1000);
 	}
-	function adminAddPoints(user){
-		console.log(user)
-		Api.post('/results',{
-			name: user.name,
-			points: user.pointsToAdd
-		})
-	}
-	function adminRemoveDisplayWinners(){
-		Api.get('/adminRemoveDisplayWinners')
-	}
 	$: seconds = Math.floor($timeToStart)
-	
-
 </script>
 
 <main>
-	<img src="images/mpya-css-battle-logo.png"/>
+	{#if !loggedIn}
+		<img src="images/mpya-css-battle-logo.png"/>
+	{/if}
 	<div class="middle">
-		{#if showWinners}
-			<h2>Winners</h2>
-			{#if isAdmin}
-				<button on:click={adminRemoveDisplayWinners}>Main menu</button>
-			{/if}
-			{#each winners as winner}
-				<h3>{winner.name} - {winner.totalScore !== null ? `${winner.totalScore} points` : 'No points'}</h3>
-			{/each}
+		{#if loggedIn}
+			<Menu 
+				showWinners={showWinners} 
+				isAdmin={isAdmin}
+			/>
+		{/if}
 
-		{:else if started && !isAdmin}	
-				{#key seconds}
-					<h1 
-						in:fly="{{delay: 0, duration: 300, x: -100, y: 0, opacity: 0, easing: quintOut}}"
-						out:fly="{{delay: 0, duration: 300, x: 100, y: 0, opacity: 0, easing: quintOut}}"
-					>
-						{seconds}
-					</h1>
-				{/key}
+		{#if loggedIn && started && !isAdmin}	
+			{#key seconds}
+				<h1 
+					in:fly="{{delay: 0, duration: 300, x: -100, y: 0, opacity: 0, easing: quintOut}}"
+					out:fly="{{delay: 0, duration: 300, x: 100, y: 0, opacity: 0, easing: quintOut}}"
+				>
+					{seconds}
+				</h1>
+			{/key}
 		{:else if loggedIn}
-			{#if isAdmin}
-			 <AdminMenu />
-			{/if}
-			<h2>Contestants</h2>
 			<div class="users"> 
-				{#each users as user, index}
-					<div class="user">
-						<h3>{user.name}</h3>
-						{#if user.points > 0}
-							<p>Points: {user.points}</p>
-						{/if}
-						{#if isAdmin}
-							<input placeholder="Points" bind:value={users[index].pointsToAdd} type="number" />
-							<button on:click={() => adminAddPoints(user)}>Submit</button>
-						{/if}
+				{#if showWinners}
+					<WinnerTable 
+						winners={winners}
+					/>
+				{:else}
+					<h2>Contestants</h2>
+					<div class="userGrid">
+						{#each users as user}
+							<User
+								name={user.name}
+								points={user.points}
+								pointsToAdd={users.pointsToAdd}
+								isAdmin={isAdmin}
+							/>
+						{/each}
 					</div>
-				{/each}
+				{/if}
 			</div>	
 		{:else}
+		<div class="login">
 			<label>Username</label>
 			<input 
 				placeholder="Your username"
@@ -136,6 +127,7 @@
 					<span>{loginError}</span>
 				{/if}
 			<button on:click={submit} disabled={name.length <= 0}>Get Started</button>
+		</div>
 		{/if}
 	</div>
 	
@@ -145,7 +137,7 @@
 <style global>
 	main {
 		text-align: center;
-		padding: 1em;
+		height: 100%;
 		margin: 0 auto;
 		background: white;
 		color: white;
@@ -164,24 +156,19 @@
 		padding: 0.5em 0;
 	}
 	.middle{
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%,-50%);
+		height: 100%;
 		width: 100%;
 		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		background: #E34586;
-		padding: 32px 0;
 		min-height: 140px;
 	}
 	.users{
-		display:flex;
+		background: #E34586;
 		width: 100%;
-		justify-content: space-around;
-		margin-top:24px;
+		padding: 40px;
+	}
+	.userGrid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
 	}
 	h3{
 		margin:0;
