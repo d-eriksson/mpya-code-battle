@@ -57,8 +57,9 @@
   nav {
     display: flex;
     flex-direction: column;
-    padding: 0 7em;
+    padding: 0 4em;
     justify-content: center;
+    max-width: 340px;
   }
 
   nav > div {
@@ -69,4 +70,10 @@
     margin-left: .4em;
     width: 100%;
   }
+
+	@media screen and (max-width: 940px) {
+    nav {
+      padding: 0;
+    }
+	}
 </style>

@@ -12,13 +12,9 @@
 	}
 </script>
 
-<div>
-  <div class="userHeader">
-    <h3>{name}</h3>
-    {#if points > 0}
-      <p>({points} pt{points > 1 ? 's' : ''})</p>
-    {/if}
-  </div>
+<div class="userCard">
+  <h3>{name}</h3>
+  <p>{points || 0} point{points > 1 ? 's' : ''}</p>
   {#if isAdmin}
     <div class="userPoints">
       <input 
@@ -37,29 +33,23 @@
 </div>
 
 <style>
-  div {
-    width: 300px;
+  .userCard {
     display: flex;
     flex-direction: column;
-    margin: auto;
-  }
-  
-  .userHeader {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    margin: 30px auto;
+    align-items: flex-start;
+
+    background: #00B2AA;
+    box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.25);
+    padding: 10px;
+    border-radius: 5px;
   }
 
-  .userHeader h3 {
+  h3 {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    max-width: 250px;
-  }
-
-  .userHeader p {
-    min-width: 80px;
+    width: 280px;
   }
 
   .userPoints {
@@ -69,5 +59,15 @@
 
   .userPoints > button {
     width: 100%;
+  }
+
+  button {
+    background: #E34586;
+    box-shadow: 0px 2px 3px rgba(81, 26, 48, 0.5);
+    margin-left: 10px;
+  }
+
+  h3, p {
+    margin: 0.5em 0;
   }
 </style>

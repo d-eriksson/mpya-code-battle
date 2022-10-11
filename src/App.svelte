@@ -78,64 +78,64 @@
 
 <main>
 	{#if !loggedIn}
-		<img src="images/mpya-css-battle-logo.png"/>
-	{/if}
-	<div class="middle">
-		{#if loggedIn}
+		<div class="login">
+			<img src="images/mpya-css-battle-logo.png"/>
+			<label for="username">
+				Username
+			</label>
+			<input 
+				name="username"
+				placeholder="Your username"
+				bind:value={name}
+			/>
+			{#if loginError}
+				<span>{loginError}</span>
+			{/if}
+			<button on:click={submit} disabled={name.length <= 0}>Get Started</button>
+		</div>
+	{:else}
+		<div class="middle">
 			<Menu 
 				showWinners={showWinners} 
 				isAdmin={isAdmin}
 			/>
-		{/if}
-
-		{#if loggedIn && started && !isAdmin}	
-			{#key seconds}
-				<h1 
-					in:fly="{{delay: 0, duration: 300, x: -100, y: 0, opacity: 0, easing: quintOut}}"
-					out:fly="{{delay: 0, duration: 300, x: 100, y: 0, opacity: 0, easing: quintOut}}"
-				>
-					{seconds}
-				</h1>
-			{/key}
-		{:else if loggedIn}
-			<div class="users"> 
-				{#if showWinners}
-					<WinnerTable 
-						winners={winners}
-					/>
-				{:else}
-					<h1>Contestants</h1>
-					<div class="userGrid">
-						{#each users as user}
-							<User
-								name={user.name}
-								points={user.points}
-								pointsToAdd={users.pointsToAdd}
-								isAdmin={isAdmin}
-							/>
-						{/each}
-					</div>
-				{/if}
-			</div>	
-		{:else}
-		<div class="login">
-			<label>Username</label>
-			<input 
-				placeholder="Your username"
-				bind:value={name}>
-				{#if loginError}
-					<span>{loginError}</span>
-				{/if}
-			<button on:click={submit} disabled={name.length <= 0}>Get Started</button>
+			{#if started}	
+				{#key seconds}
+					<h1 
+						in:fly="{{delay: 0, duration: 300, x: -100, y: 0, opacity: 0, easing: quintOut}}"
+						out:fly="{{delay: 0, duration: 300, x: 100, y: 0, opacity: 0, easing: quintOut}}"
+					>
+						{seconds}
+					</h1>
+				{/key}
+			{:else}
+				<div class="users"> 
+					{#if showWinners}
+						<WinnerTable 
+							winners={winners}
+						/>
+					{:else}
+						<h1>Contestants</h1>
+						<div class="userGrid">
+							{#each users as user}
+								<User
+									name={user.name}
+									points={user.points}
+									pointsToAdd={users.pointsToAdd}
+									isAdmin={isAdmin}
+								/>
+							{/each}
+						</div>
+					{/if}
+				</div>	
+			{/if}
 		</div>
-		{/if}
-	</div>
-	
-	
+	{/if}
 </main>
 
 <style global>
 	main {
+		display: flex;
 		text-align: center;
 		height: 100%;
 		margin: 0 auto;
@@ -145,6 +145,12 @@
 	}
 	input{
 		display: block;
+	}
+	.login{
+		display: flex;
+		flex-direction: column;
+		max-width: 23em;
+		margin: auto;
 	}
 	label{
 		text-align: left;
@@ -159,22 +165,29 @@
 	.users{
 		background: #E34586;
 		width: 100%;
-		padding: 40px;
+		overflow-y: scroll;
 	}
 	.userGrid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
 	}
-	h3{
-		margin:0;
-	}
-	p{
-		margin:0;
-	}
-
+  h1 {
+		padding: 10px;
+  }
 	@media (min-width: 640px) {
 		main {
 			max-width: none;
+		}
+	}
+
+	@media screen and (max-width: 940px) {
+		.middle {
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.users {
+			overflow-y: unset;
 		}
 	}
 </style>
