@@ -1,4 +1,5 @@
 <script>
+  import { fly } from 'svelte/transition'
 	import Api from './service/api';
 
   export let name 
@@ -12,7 +13,7 @@
 	}
 </script>
 
-<div class="userCard">
+<div class="userCard" in:fly="{{ y: 100, duration: 1000}}">
   <h3>{name}</h3>
   <p>{points || 0} point{points !== 1 ? 's' : ''}</p>
   {#if canChangePoints}

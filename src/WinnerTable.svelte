@@ -1,15 +1,21 @@
 <script>
+  import { onMount } from 'svelte';
+  import { fly } from 'svelte/transition'
   import User from "./User.svelte";
 
   export let winners;
 
   const placementIcon = ['🥇', '🥈', '🥉'] 
+  let shouldStartAnimation = false
 
 </script>
 
 <div class="winners">
   <h1>Winners</h1>
-  <div class="winnerTable">
+  <div 
+    class="winnerTable"
+    in:fly="{{ y: 200, duration: 1500 }}"
+  >
     {#each winners as winner, index}
       <div class="winner">
         <h3>

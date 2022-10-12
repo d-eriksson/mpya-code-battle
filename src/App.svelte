@@ -94,7 +94,7 @@
 			<button on:click={submit} disabled={name.length <= 0}>Get Started</button>
 		</div>
 	{:else}
-		<div class="middle">
+		<div class="middle" in:fly="{{ x: 200, duration: 700 }}">
 			<Menu 
 				showWinners={showWinners} 
 				isAdmin={isAdmin}
