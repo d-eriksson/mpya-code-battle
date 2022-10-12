@@ -4,7 +4,7 @@
   export let name 
   export let points
   export let pointsToAdd
-  export let isAdmin
+  export let canChangePoints
 
 	const adminAddPoints = ({ name, points }) => {
 		console.log(name, points)
@@ -14,8 +14,8 @@
 
 <div class="userCard">
   <h3>{name}</h3>
-  <p>{points || 0} point{points > 1 ? 's' : ''}</p>
-  {#if isAdmin}
+  <p>{points || 0} point{points !== 1 ? 's' : ''}</p>
+  {#if canChangePoints}
     <div class="userPoints">
       <input 
         placeholder="Points" 
@@ -34,9 +34,10 @@
 
 <style>
   .userCard {
+    width: 300px;
     display: flex;
     flex-direction: column;
-    margin: 30px auto;
+    margin: 10px auto;
     align-items: flex-start;
 
     background: #00B2AA;
@@ -49,12 +50,13 @@
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
-    width: 280px;
+    width: 100%;
   }
 
   .userPoints {
     display: flex;
     flex-direction: row;
+    width: 100%;
   }
 
   .userPoints > button {

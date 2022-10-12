@@ -32,10 +32,7 @@
 <nav>
   <img src="images/mpya-css-battle-logo.png"/>
   {#if isAdmin}
-    {#if showWinners}
-      <button on:click={adminRemoveDisplayWinners}>Main menu</button>
-    {:else}
-      <div>
+      <div class={showWinners ? 'hidden' : ''}>
         <input 
           placeholder="CSSBattle ID" 
           bind:value={gameNumber} 
@@ -47,9 +44,12 @@
           Start game
         </button>
       </div>
-      <button on:click={adminDisplayWinners}>Display winners</button>
-      <button on:click={adminReset}>Reset round</button>
-    {/if}
+      {#if showWinners}
+        <button on:click={adminRemoveDisplayWinners}>Main menu</button>
+      {:else}
+        <button on:click={adminDisplayWinners}>Display winners</button>
+      {/if}
+      <button on:click={adminReset} class={showWinners ? 'hidden' : ''}>Reset round</button>
   {/if}
 </nav>
 
@@ -69,6 +69,10 @@
   nav > div > button {
     margin-left: .4em;
     width: 100%;
+  }
+
+  .hidden {
+    visibility: hidden;
   }
 
 	@media screen and (max-width: 940px) {

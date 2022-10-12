@@ -112,17 +112,17 @@
 				<div class="users"> 
 					{#if showWinners}
 						<WinnerTable 
-							winners={winners}
-						/>
+							winners={winners}	
+						/>	
 					{:else}
 						<h1>Contestants</h1>
-						<div class="userGrid">
+						<div class={"userGrid"}>
 							{#each users as user}
 								<User
 									name={user.name}
 									points={user.points}
 									pointsToAdd={users.pointsToAdd}
-									isAdmin={isAdmin}
+									canChangePoints={!showWinners && isAdmin}
 								/>
 							{/each}
 						</div>
@@ -163,8 +163,10 @@
 		min-height: 140px;
 	}
 	.users{
-		background: #E34586;
 		width: 100%;
+		display: flex;
+		flex-direction: column;
+		background: #E34586;
 		overflow-y: scroll;
 	}
 	.userGrid {
@@ -172,7 +174,7 @@
 		grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
 	}
   h1 {
-		padding: 10px;
+		padding: 20px 0;
   }
 	@media (min-width: 640px) {
 		main {
@@ -187,6 +189,7 @@
 		}
 
 		.users {
+			margin-top: 20px;
 			overflow-y: unset;
 		}
 	}
