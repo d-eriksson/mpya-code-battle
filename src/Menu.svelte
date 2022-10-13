@@ -6,11 +6,13 @@
 	let gameNumber = null;
 
 	function adminStartGame(){
+    console.log("starting game")
 		if(gameNumber){
 			Api.get(`/start?gameId=${gameNumber}`)
 				.then(function (response) {
 					// handle success
 					console.log(response);
+          console.log("successfully started game")
 				})
 				.catch(function (error) {
 					// handle error
@@ -27,12 +29,14 @@
 	function adminRemoveDisplayWinners(){
 		Api.get('/adminRemoveDisplayWinners')
 	}
+
+  const hide = showWinners ? 'hidden' : ''
 </script>
 
-<nav>
+<nav class="width--full flex--column">
   <img src="images/mpya-css-battle-logo.png"/>
   {#if isAdmin}
-      <div class={showWinners ? 'hidden' : ''}>
+      <div class={`start-game flex--row ${hide}`}>
         <input 
           placeholder="CSSBattle ID" 
           bind:value={gameNumber} 
@@ -49,30 +53,24 @@
       {:else}
         <button on:click={adminDisplayWinners}>Display winners</button>
       {/if}
-      <button on:click={adminReset} class={showWinners ? 'hidden' : ''}>Reset round</button>
+      <button on:click={adminReset} class={hide}>Reset round</button>
   {/if}
 </nav>
 
 <style>
   nav {
-    display: flex;
-    flex-direction: column;
     padding: 0 4em;
     justify-content: center;
     max-width: 340px;
   }
 
-  nav > div {
-    display: flex;
+  .start-game input {
+    width: 66%;
   }
 
-  nav > div > button {
+  .start-game button {
+    width: 33%;
     margin-left: .4em;
-    width: 100%;
-  }
-
-  .hidden {
-    visibility: hidden;
   }
 
 	@media screen and (max-width: 940px) {

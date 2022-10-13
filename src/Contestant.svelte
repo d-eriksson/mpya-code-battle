@@ -11,19 +11,25 @@
 		console.log(name, points)
 		Api.post('/results', { name, points })
 	}
+
+  const pointString = points === 1 ? "point" : "points"
 </script>
 
-<div class="userCard" in:fly="{{ y: 100, duration: 1000}}">
-  <h3>{name}</h3>
-  <p>{points || 0} point{points !== 1 ? 's' : ''}</p>
+<div 
+  class="contestant flex--column" 
+  in:fly="{{ y: 100, duration: 1000}}"
+>
+  <h3 class="truncate width--full">{name}</h3>
+  <p>{points || 0} {pointString}</p>
   {#if canChangePoints}
-    <div class="userPoints">
+    <div class="width--full flex--row">
       <input 
         placeholder="Points" 
         bind:value={pointsToAdd}
         type="number"
       />
       <button 
+        class="width--full"
         on:click={() => adminAddPoints({name, points: pointsToAdd})}
         disabled={!pointsToAdd}
       >
@@ -34,43 +40,29 @@
 </div>
 
 <style>
-  .userCard {
+  .contestant {
     width: 300px;
-    display: flex;
-    flex-direction: column;
-    margin: 10px auto;
-    align-items: flex-start;
-
-    background: #00B2AA;
+    margin: 20px auto;
     box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.25);
-    padding: 10px;
-    border-radius: 5px;
+
+    padding: var(--padding-small);
+    background: var(--mpya-turqoise);
+    border-radius: var(--border-radius);
   }
 
-  h3 {
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    width: 100%;
-  }
-
-  .userPoints {
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-  }
-
-  .userPoints > button {
-    width: 100%;
+  input {
+    width: 75%;
   }
 
   button {
-    background: #E34586;
+    width: 25%;
+    background: var(--mpya-pink);
     box-shadow: 0px 2px 3px rgba(81, 26, 48, 0.5);
-    margin-left: 10px;
+    margin-left: 0.5em;
   }
 
   h3, p {
-    margin: 0.5em 0;
+    padding: var(--padding-small) 0;
   }
+
 </style>
