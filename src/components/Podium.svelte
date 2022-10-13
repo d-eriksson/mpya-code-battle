@@ -1,6 +1,6 @@
 <script>
   import { fly } from 'svelte/transition'
-  import User from "./Contestant.svelte";
+  import User from "./components/Contestant.svelte";
 
   export let winners;
 
