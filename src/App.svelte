@@ -75,7 +75,6 @@
 	{:else}
 		<div 
 			class="lobby width--full height--full flex--row" 
-			in:fly="{{ x: 200, duration: 700 }}"
 		>
 			<Menu 
 				showWinners={showWinners} 
@@ -95,7 +94,10 @@
 					/>	
 				{:else}
 					<h1 class="text-align-center">Contestants</h1>
-					<div class="grid">
+					<div 
+						class="grid"
+						in:fly="{{ x: 200, duration: 700 }}"
+					>
 						{#each users as user}
 							<User
 								name={user.name}
@@ -123,7 +125,7 @@
 	}
 
   h1 {
-		padding: 20px 0;
+		padding: var(--padding-small) 0;
   }
 
 	@media screen and (max-width: 940px) {
