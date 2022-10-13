@@ -2,11 +2,13 @@
 	import io from "socket.io-client";
 	import { fly } from 'svelte/transition';
 	import { tweened } from "svelte/motion";
-  import Menu from "./Menu.svelte";
-  import User from "./Contestant.svelte";
-	import Podium from "./Podium.svelte"
-  import Countdown from "./Countdown.svelte";
-  import Login from "./Login.svelte";
+
+  import Menu from "./components/Menu.svelte";
+  import Contestant from "./components/Contestant.svelte";
+	import Podium from "./components/Podium.svelte"
+  import Countdown from "./components/Countdown.svelte";
+  import Login from "./components/Login.svelte";
+
 	let loggedIn = false;
 	let started = false;
 	let isAdmin = false;
@@ -15,6 +17,7 @@
 	let winners = [];
 	let timeToStart;
 	const socket = io();
+
 	socket.on('user-change', (data) => {
 		if(socket.id == data.socketId){
 			loggedIn = true;
@@ -32,6 +35,8 @@
 			loggedIn = false;
 		}
 		started = false;
+		users = []
+		winners = []
 	})
 	socket.on('display-winners', (data)=>{
 		console.log(data);
@@ -99,7 +104,7 @@
 						in:fly="{{ x: 200, duration: 700 }}"
 					>
 						{#each users as user}
-							<User
+							<Contestant
 								name={user.name}
 								points={user.points}
 								pointsToAdd={users.pointsToAdd}
@@ -113,7 +118,7 @@
 	{/if}
 </main>
 
-<style global>
+<style>
 	.contestants{
 		background: var(--mpya-pink);
 		overflow-y: scroll;

@@ -1,6 +1,6 @@
 <script>
   import { fly } from 'svelte/transition'
-	import Api from './service/api';
+	import Api from '../service/api';
 
   export let name 
   export let points

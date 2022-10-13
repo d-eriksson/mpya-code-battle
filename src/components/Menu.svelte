@@ -1,5 +1,5 @@
 <script>
-	import Api from './service/api';
+	import Api from '../service/api';
 
   export let showWinners;
   export let isAdmin;

@@ -1,6 +1,6 @@
 <script>
   import { fly } from 'svelte/transition'
-  import User from "./Contestant.svelte";
+  import Contestant from "./Contestant.svelte";
 
   export let winners;
 
@@ -18,7 +18,7 @@
         <h3 class="text-align-center">
           {placementEmojis[index]}
         </h3>
-        <User
+        <Contestant
           name={name}
           points={points}
           pointsToAdd={totalScore}
