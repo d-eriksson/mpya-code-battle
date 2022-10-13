@@ -63,6 +63,12 @@ button {
 	box-shadow: 0px 3px 0px #E34586;
 }
 
+.center {
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+}
+
 button:disabled {
 	opacity: 0.45;
 	cursor: auto;

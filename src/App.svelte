@@ -99,36 +99,40 @@
 				showWinners={showWinners} 
 				isAdmin={isAdmin}
 			/>
-			{#if started}	
-				{#key seconds}
-					<h1 
-						in:fly="{{delay: 0, duration: 300, x: -100, y: 0, opacity: 0, easing: quintOut}}"
-						out:fly="{{delay: 0, duration: 300, x: 100, y: 0, opacity: 0, easing: quintOut}}"
-					>
-						{seconds}
-					</h1>
-				{/key}
-			{:else}
-				<div class="users"> 
-					{#if showWinners}
-						<WinnerTable 
-							winners={winners}	
-						/>	
-					{:else}
-						<h1>Contestants</h1>
-						<div class={"userGrid"}>
-							{#each users as user}
-								<User
-									name={user.name}
-									points={user.points}
-									pointsToAdd={users.pointsToAdd}
-									canChangePoints={!showWinners && isAdmin}
-								/>
-							{/each}
+			<div class="users"> 
+				{#if started && !isAdmin}	
+					<div class="shadedBackground center">
+						<div class="countdown center">
+							{#key seconds}
+								<h1 
+									class="center"
+									in:fly="{{delay: 0, duration: 300, x: -100, y: 0, opacity: 0, easing: quintOut}}"
+									out:fly="{{delay: 0, duration: 300, x: 100, y: 0, opacity: 0, easing: quintOut}}"
+								>
+									{seconds}
+								</h1>
+							{/key}
 						</div>
-					{/if}
-				</div>	
-			{/if}
+					</div>
+				{/if}
+				{#if showWinners}
+					<WinnerTable 
+						winners={winners}	
+					/>	
+				{:else}
+					<h1>Contestants</h1>
+					<div class={"userGrid"}>
+						{#each users as user}
+							<User
+								name={user.name}
+								points={user.points}
+								pointsToAdd={users.pointsToAdd}
+								canChangePoints={!showWinners && isAdmin}
+							/>
+						{/each}
+					</div>
+				{/if}
+			</div>	
 		</div>
 	{/if}
 </main>
@@ -162,8 +166,16 @@
 		display: flex;
 		min-height: 140px;
 	}
+	.shadedBackground {
+		position: fixed;
+		z-index: 1;
+		background: rgba(0, 0, 0, 0.55);
+		width: 100%;
+		height: 100%;
+	}
 	.users{
 		width: 100%;
+		height: 100%;
 		display: flex;
 		flex-direction: column;
 		background: #E34586;
@@ -172,6 +184,23 @@
 	.userGrid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+	}
+	.countdown {
+		position: absolute;
+		display: flex;
+		justify-content: center;
+    background: #E34586;
+    color: #fff;
+    z-index: 1;
+		width: 100%;
+		height: 80px;
+	}
+
+	.countdown h1 {
+		position: absolute;
+	}
+	.login span {
+		color: red;
 	}
   h1 {
 		padding: 20px 0;
