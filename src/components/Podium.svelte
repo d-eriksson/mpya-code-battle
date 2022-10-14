@@ -13,14 +13,14 @@
     class={winners.length !== 3 ? 'flex--column' : 'winners'}
     in:fly="{{ y: 200, duration: 1500 }}"
   >
-    {#each winners as {name, points, totalScore}, index}
+    {#each winners as winner, index}
       <div class="winner">
         <h3 class="text-align-center">
           {placementEmojis[index]}
         </h3>
         <Contestant
-          name={name}
-          points={totalScore}
+          name={winner.name}
+          points={winner.totalScore}
           pointsToAdd={0}
           canChangePoints={false}
         />
