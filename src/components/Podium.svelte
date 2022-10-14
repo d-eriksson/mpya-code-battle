@@ -20,8 +20,8 @@
         </h3>
         <Contestant
           name={name}
-          points={points}
-          pointsToAdd={totalScore}
+          points={totalScore}
+          pointsToAdd={0}
           canChangePoints={false}
         />
       </div>
