@@ -52,9 +52,8 @@ app.get('/api/displayWinners', (req, res) =>{
         })
         user.totalScore = totalPoints;
     })
-    winners.sort((first, second)=>{
-        return first.totalScore < second.totalScore;
-    });
+
+    winners.sort((first, second) => second.totalScore - first.totalScore);
 
     io.emit('display-winners', winners.slice(0,3));
     res.send({
