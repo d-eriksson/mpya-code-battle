@@ -14,7 +14,7 @@ const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json()
 app.use(express.static('public'));
 
-const ADMIN = 'admin'
+const ADMIN = 'DavidSuperAdmin'
 
 app.get('/api/start', (req, res) => {
     io.emit("start", {secondsToStart: 5, gameId: req.query.gameId})
