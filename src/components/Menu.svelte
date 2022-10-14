@@ -49,11 +49,24 @@
         </button>
       </div>
       {#if showWinners}
-        <button on:click={adminRemoveDisplayWinners}>Main menu</button>
+        <button 
+          on:click={adminRemoveDisplayWinners}
+        >
+          Main menu
+        </button>
       {:else}
-        <button on:click={adminDisplayWinners}>Display winners</button>
+        <button 
+          on:click={adminDisplayWinners}
+        >
+          Display winners
+        </button>
       {/if}
-      <button on:click={adminReset} class={hide}>Reset round</button>
+      <button 
+        on:click={adminReset} 
+        class={hide}
+      >
+        Reset round
+      </button>
   {/if}
 </nav>
 
@@ -70,7 +83,7 @@
 
   .start-game button {
     width: 33%;
-    margin-left: .4em;
+    margin-left: .5em;
   }
 
 	@media screen and (max-width: 940px) {

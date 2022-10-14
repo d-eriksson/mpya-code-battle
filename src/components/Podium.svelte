@@ -35,7 +35,7 @@
   }
 
   h3 {
-    font-size: 50px;
+    font-size: 3.5em;
   }
 
   .winners {
@@ -63,7 +63,7 @@
     grid-row-start: 2;
   }
 
-  @media screen and (max-width: 1420px) {
+  @media screen and (max-width: 1490px) {
     .winners {
       display: flex;
       flex-direction: column;

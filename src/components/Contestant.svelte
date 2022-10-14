@@ -42,7 +42,7 @@
 <style>
   .contestant {
     width: 300px;
-    margin: 20px auto;
+    margin: 1em auto;
     box-shadow: 0px 0px 5px 2px rgba(0, 0, 0, 0.25);
 
     padding: var(--padding-small);
