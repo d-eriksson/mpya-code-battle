@@ -14,6 +14,8 @@ const bodyParser = require('body-parser');
 var jsonParser = bodyParser.json()
 app.use(express.static('public'));
 
+const ADMIN = 'DavidSuperAdmin'
+
 app.get('/api/start', (req, res) => {
     io.emit("start", {secondsToStart: 5, gameId: req.query.gameId})
     res.send({
@@ -50,11 +52,16 @@ app.get('/api/displayWinners', (req, res) =>{
         })
         user.totalScore = totalPoints;
     })
-    winners.sort((first, second)=>{
-        return first.totalScore < second.totalScore;
-    });
+
+    winners.sort((first, second) => second.totalScore - first.totalScore);
 
     io.emit('display-winners', winners.slice(0,3));
+    res.send({
+        success: true
+    });
+})
+app.get('/api/adminRemoveDisplayWinners', (req, res) => {
+    io.emit('display-main-menu')
     res.send({
         success: true
     });
@@ -96,7 +103,7 @@ io.on('connection', (socket) => {
     });
     
     socket.on('login', (data) => {
-        const admin = data.name==="DavidSuperAdmin";
+        const admin = data.name=== ADMIN;
         if(!admin){
             const userInPool = currentUsers.find(user => user.name === data.name);
             if(!userInPool){
