@@ -3,11 +3,11 @@
 	import { fly } from 'svelte/transition';
 	import { tweened } from "svelte/motion";
 
-  import Menu from "./components/Menu.svelte";
-  import Contestant from "./components/Contestant.svelte";
+	import Menu from "./components/Menu.svelte";
+	import Contestant from "./components/Contestant.svelte";
 	import Podium from "./components/Podium.svelte"
-  import Countdown from "./components/Countdown.svelte";
-  import Login from "./components/Login.svelte";
+	import Countdown from "./components/Countdown.svelte";
+	import Login from "./components/Login.svelte";
 
 	let loggedIn = false;
 	let started = false;
@@ -130,9 +130,9 @@
 		grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
 	}
 
-  h1 {
+	h1 {
 		padding: var(--padding-small) 0;
-  }
+	}
 
 	@media screen and (max-width: 940px) {
 		.lobby {
