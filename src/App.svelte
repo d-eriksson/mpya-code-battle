@@ -49,10 +49,11 @@
 			showWinners = false;
 	})
 	socket.on('start', (data) => {
-		started = true;
-		timeToStart = tweened(data.secondsToStart);
-		startCounter(`https://cssbattle.dev/play/${data.gameId}`);
-    console.log("received start")
+		if (loggedIn) {
+			started = true;
+			timeToStart = tweened(data.secondsToStart);
+			startCounter(`https://cssbattle.dev/play/${data.gameId}`);
+		}
 	})
 
 	function startCounter(url){
