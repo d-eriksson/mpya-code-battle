@@ -10,7 +10,7 @@
 <div class="podium">
   <h1 class="text-align-center">Winners</h1>
   <div 
-    class="winners"
+    class={winners.length !== 3 ? 'flex--column' : 'winners'}
     in:fly="{{ y: 200, duration: 1500 }}"
   >
     {#each winners as {name, points, totalScore}, index}
